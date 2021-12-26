@@ -19,6 +19,7 @@ body {
   width: 100%;
   height: 100%;
   font-family: var(--font-family);
+  transition: 0.5s background-color;
 }
 .container {
   position: relative;
@@ -43,7 +44,7 @@ body {
   align-items: center;
   justify-content: center;
   height: 100%;
-  border: 1px solid purple;
+  /* border: 1px solid purple; */
 }
 .links a {
   position: relative;
@@ -70,4 +71,41 @@ body {
 }
 .links a:hover span {
   transform: translate(300px) rotate(-40deg);
+}
+.toggle-rect {
+  position: absolute;
+  right: 5%;
+  top: 7.5%;
+  width: 40px;
+  height: 25px;
+  background-color: #f3f3f3;
+  border-radius: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 0 5px;
+  transition: 0.5s all;
+  box-sizing: content-box;
+}
+.toggle-circle {
+  width: 50%;
+  height: 75%;
+  border-radius: 50%;
+  background-color: grey;
+  transition: 0.5s all;
+  transform: translateX(0%);
+}
+/* For the toggle (day and light feature) functionality */
+.toggle-active {
+  background-color: var(--a-prim);
+}
+.toggle-active .toggle-circle {
+  transform: translateX(100%);
+  background-color: white;
+}
+.body-active {
+  background-color: white;
+}
+.body-active #head-word {
+  color: black;
 }
