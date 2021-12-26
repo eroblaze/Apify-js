@@ -1,0 +1,73 @@
+:root {
+  --bgcolor: black;
+  --primary: white;
+  --a-width: 300px;
+  --a-height: 40px;
+  --font-family: "Poppins", sans-serif;
+  --a-prim: #04aa6d;
+  --a-sec: #a1bd43;
+}
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+html,
+body {
+  background-color: var(--bgcolor);
+  color: var(--primary);
+  width: 100%;
+  height: 100%;
+  font-family: var(--font-family);
+}
+.container {
+  position: relative;
+  border: 1px solid var(--primary);
+  width: 80%;
+  margin: auto;
+  height: 100%;
+  text-align: center;
+  overflow: hidden;
+}
+
+#head-word {
+  position: absolute;
+  left: 50%;
+  top: 10%;
+  transform: translate(-50%, -50%);
+  font-size: 3em;
+}
+.links {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  border: 1px solid purple;
+}
+.links a {
+  position: relative;
+  text-decoration: none;
+  color: inherit;
+  border-radius: 10px;
+  padding: 5px 10px;
+  width: var(--a-width);
+  margin-top: 2em;
+  height: var(--a-height);
+  display: grid;
+  place-content: center;
+  font-weight: 800;
+  background-image: linear-gradient(to right, var(--a-prim), var(--a-sec));
+  overflow: hidden;
+}
+.links a span {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  border-right: 10px solid rgba(255, 255, 255, 0.5);
+  transform: translate(-100px) rotate(-40deg);
+  transition: 1s all;
+}
+.links a:hover span {
+  transform: translate(300px) rotate(-40deg);
+}
