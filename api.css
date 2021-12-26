@@ -60,6 +60,7 @@ body {
   font-weight: 800;
   background-image: linear-gradient(to right, var(--a-prim), var(--a-sec));
   overflow: hidden;
+  transition: 1s all;
 }
 .links a span {
   position: absolute;
@@ -95,6 +96,35 @@ body {
   transition: 0.5s all;
   transform: translateX(0%);
 }
+.board {
+  position: absolute;
+  left: 50%;
+  top: 52%;
+  transform: translate(-50%, -50%);
+  width: 450px;
+  height: 60%;
+  background-color: white;
+}
+.back {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  width: fit-content;
+  padding: 5px 10px;
+  text-align: center;
+  border-radius: 10px;
+  cursor: pointer;
+  text-transform: lowercase;
+  background-image: linear-gradient(to right, var(--a-prim), var(--a-sec));
+}
+/* For the slide animation */
+.move {
+  transform: translateX(-1000px);
+}
+.move:nth-child(1) {
+  /* transition-delay: 0.2s; */
+}
+
 /* For the toggle (day and light feature) functionality */
 .toggle-active {
   background-color: var(--a-prim);
