@@ -159,7 +159,9 @@ async function getAge(e) {
   const name = ageIn.value.trim();
   const url = "https://api.agify.io/?name=";
 
-  const response = await fetch(`${url}${name}`);
-  const data = await response.json();
-  extractAge(data);
+  if (name) {
+    const response = await fetch(`${url}${name}`);
+    const data = await response.json();
+    extractAge(data);
+  }
 }
