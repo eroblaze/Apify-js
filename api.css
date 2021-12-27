@@ -113,7 +113,7 @@ body {
   width: fit-content;
   padding: 5px 10px;
   text-align: center;
-  transform: translateX(100px);
+  transform: translateX(1000px);
   transition: 1s all;
   border-radius: 10px;
   cursor: pointer;
@@ -131,7 +131,7 @@ body {
   transform: translate(-50%, -50%);
   opacity: 1;
   transition: 1.5s all;
-  border: 1px solid red;
+  /* border: 1px solid red; */
 }
 
 .dic-result {
@@ -144,7 +144,7 @@ body {
   transition: 1s all;
 }
 .dic-result-ext {
-  height: 180px;
+  height: 150px;
 }
 
 #dic-input,
@@ -172,6 +172,15 @@ body {
   border-radius: 10px;
   margin-top: 10px;
   background-image: linear-gradient(to right, var(--a-prim), var(--a-sec));
+}
+.dic-title,
+.dic-error {
+  color: var(--a-prim);
+  text-transform: capitalize;
+  font-size: 1.1em;
+}
+.dic-error {
+  color: #ffcccc;
 }
 
 .age {
@@ -253,6 +262,9 @@ body {
   color: black;
 }
 .body-active .dic-result {
+  color: black;
+}
+.body-active .dic-error {
   color: black;
 }
 

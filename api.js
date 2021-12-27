@@ -4,7 +4,11 @@ const mainA = document.querySelectorAll(".links a");
 const backBtn = document.querySelector(".back");
 const dic = document.querySelector(".dic");
 const age = document.querySelector(".age");
+const ageForm = document.querySelector(".age form");
 const dicform = dic.querySelector("form");
+const ageEl = document.querySelector(".age-counter");
+const ageIn = document.querySelector("#age-input");
+
 dic.classList.add("hide");
 age.classList.add("hide");
 
@@ -17,11 +21,22 @@ backBtn.addEventListener("click", () => {
   mainA.forEach((el) => el.classList.remove("move"));
   removeGroup();
   backBtn.classList.remove("slideBack");
+  // dic section
+  const dic = document.querySelector(".dic-result");
+  dic.textContent = "";
+  dic.classList.remove("dic-result-ext");
+  const loaderContainer = document.querySelector(".loader-container");
+  loaderContainer.replaceChildren();
+  // age section
+  ageEl.textContent = "?";
+  ageIn.value = "";
 });
 toggleBtn.addEventListener("click", toggle);
 mainA.forEach((el) => el.addEventListener("click", animateBtn));
 
 dicform.addEventListener("submit", getMeaning);
+
+ageForm.addEventListener("submit", getAge);
 
 function toggle() {
   toggleBtn.classList.toggle("toggle-active");
@@ -59,6 +74,7 @@ function createLoading() {
   const loaderContainer = document.querySelector(".loader-container");
   const loading = document.createElement("div");
   loading.className = "loading";
+  loaderContainer.replaceChildren();
   loaderContainer.append(loading);
 }
 
@@ -67,19 +83,34 @@ function getMeaning(e) {
   class Invalid extends Error {}
   createLoading();
 
-  const dicInput = document.querySelector("#dic-input");
   const result = document.querySelector(".dic-result");
+  result.textContent = "";
+  const dicInput = document.querySelector("#dic-input");
   const url = "https://api.dictionaryapi.dev/api/v2/entries/en/";
 
   const createMeaning = (data) => {
     const meaning = data[0].meanings[0].definitions[0].definition;
-    console.log(meaning);
+    const title = document.createElement("div");
+    title.className = "dic-title";
+    title.textContent = dicInput.value;
+    const loaderContainer = document.querySelector(".loader-container");
+    loaderContainer.replaceChildren();
+    loaderContainer.append(title);
+
     result.textContent = meaning;
     result.classList.add("dic-result-ext");
+    dicInput.value = "";
   };
   const noWord = (error) => {
-    result.textContent = error.message;
-    document.querySelector(".loading").remove();
+    result.textContent = error.message || error;
+    result.classList.add("dic-result-ext");
+    dicInput.value = "";
+    const title = document.createElement("div");
+    title.className = "dic-error";
+    title.textContent = "Error";
+    const loaderContainer = document.querySelector(".loader-container");
+    loaderContainer.replaceChildren();
+    loaderContainer.append(title);
   };
 
   (async function meaning(e) {
@@ -100,7 +131,35 @@ function getMeaning(e) {
       }
     } catch (e) {
       if (e instanceof Invalid || e instanceof Unknown) noWord(e);
-      console.log(e.message);
+      else noWord("Something went wrong!");
     }
   })(e);
+}
+
+// For the Age section
+const sleep = (ms) => {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+};
+const extractAge = async (data) => {
+  const age = data.age;
+  console.log(age);
+  if (age) {
+    count = 0;
+    while (count <= Number(age)) {
+      ageEl.textContent = count;
+      count++;
+      await sleep(100);
+    }
+  } else {
+    ageEl.textContent = "?";
+  }
+};
+async function getAge(e) {
+  e.preventDefault();
+  const name = ageIn.value.trim();
+  const url = "https://api.agify.io/?name=";
+
+  const response = await fetch(`${url}${name}`);
+  const data = await response.json();
+  extractAge(data);
 }
