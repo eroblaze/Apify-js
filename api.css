@@ -11,6 +11,7 @@
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+  font-family: var(--font-family);
 }
 html,
 body {
@@ -18,12 +19,11 @@ body {
   color: var(--primary);
   width: 100%;
   height: 100%;
-  font-family: var(--font-family);
   transition: 0.5s background-color;
 }
 .container {
   position: relative;
-  border: 1px solid var(--primary);
+  /* border: 1px solid var(--primary); */
   width: 80%;
   margin: auto;
   height: 100%;
@@ -103,15 +103,18 @@ body {
   transform: translate(-50%, -50%);
   width: 450px;
   height: 60%;
-  background-color: white;
+  /* background-color: white; */
 }
 .back {
   position: absolute;
+  z-index: 10000;
   right: 5px;
   top: 5px;
   width: fit-content;
   padding: 5px 10px;
   text-align: center;
+  transform: translateX(100px);
+  transition: 1s all;
   border-radius: 10px;
   cursor: pointer;
   text-transform: lowercase;
@@ -121,8 +124,113 @@ body {
 .move {
   transform: translateX(-1000px);
 }
-.move:nth-child(1) {
-  /* transition-delay: 0.2s; */
+.dic {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 1;
+  transition: 1.5s all;
+  border: 1px solid red;
+}
+
+.dic-result {
+  color: white;
+  font-weight: 400;
+  text-align: left;
+  margin-top: 0px;
+  height: 0px;
+  overflow: auto; /* allows for the scroll bars */
+  transition: 1s all;
+}
+.dic-result-ext {
+  height: 180px;
+}
+
+#dic-input,
+#age-input {
+  width: var(--a-width);
+  height: var(--a-height);
+  outline: none;
+  border: none;
+  padding: 5px 10px 5px 10px;
+  border: 2px solid lightgreen;
+  background-color: black;
+  color: white;
+}
+#dic-input:focus,
+#age-input:focus {
+  box-shadow: 0 0 10px lightgreen;
+}
+#dic-btn,
+#age-btn {
+  border: none;
+  color: white;
+  padding: 7px 15px;
+  cursor: pointer;
+  font-weight: 600;
+  border-radius: 10px;
+  margin-top: 10px;
+  background-image: linear-gradient(to right, var(--a-prim), var(--a-sec));
+}
+
+.age {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  opacity: 1;
+  transition: 1.5s all;
+}
+.age form,
+.grid-age {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+#age-input {
+  width: 90%;
+  height: var(--a-height);
+}
+#age-btn {
+  margin-top: 0;
+}
+.age img {
+  width: 150px;
+  height: 150px;
+}
+.grid-age {
+  position: relative;
+}
+.age-counter,
+.img-cover {
+  position: absolute;
+  color: white;
+  font-weight: 800;
+  font-size: 4em;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  display: grid;
+  place-content: center;
+  background-color: rgba(000, 000, 000, 0.5);
+}
+.img-cover {
+  background-color: white;
+  z-index: -10;
+  width: 120px;
+  height: 120px;
+}
+
+/* To hide all the different groups */
+.hide {
+  opacity: 0;
+  z-index: -10;
+}
+.slideBack {
+  transform: translateX(0px);
 }
 
 /* For the toggle (day and light feature) functionality */
@@ -138,4 +246,39 @@ body {
 }
 .body-active #head-word {
   color: black;
+}
+.body-active #dic-input,
+.body-active #age-input {
+  background-color: white;
+  color: black;
+}
+.body-active .dic-result {
+  color: black;
+}
+
+/* For the dic loading animation */
+
+.loader-container {
+  position: relative;
+  height: 40px;
+  display: grid;
+  place-items: center;
+  margin: 10px 0;
+  /* border: 1px solid white; */
+}
+
+.loading {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid rgb(151, 150, 150);
+  animation: 2s spin linear infinite;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
 }
