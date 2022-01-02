@@ -23,12 +23,13 @@ body {
 }
 .container {
   position: relative;
-  /* border: 1px solid var(--primary); */
   width: 80%;
+  max-width: 500px;
   margin: auto;
   height: 100%;
   text-align: center;
   overflow: hidden;
+  border: 1px solid purple;
 }
 
 #head-word {
@@ -39,12 +40,14 @@ body {
   font-size: 3em;
 }
 .links {
+  position: relative;
+  z-index: 10;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100%;
-  /* border: 1px solid purple; */
+  transition: 1s all;
 }
 .links a {
   position: relative;
@@ -87,6 +90,7 @@ body {
   padding: 0 5px;
   transition: 0.5s all;
   box-sizing: content-box;
+  z-index: 20;
 }
 .toggle-circle {
   width: 50%;
@@ -103,7 +107,7 @@ body {
   transform: translate(-50%, -50%);
   width: 450px;
   height: 60%;
-  /* background-color: white; */
+  word-break: break-all;
 }
 .back {
   position: absolute;
@@ -124,7 +128,8 @@ body {
 .move {
   transform: translateX(-1000px);
 }
-.dic {
+.dic,
+.country {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -148,7 +153,8 @@ body {
 }
 
 #dic-input,
-#age-input {
+#age-input,
+#country-input {
   width: var(--a-width);
   height: var(--a-height);
   outline: none;
@@ -159,11 +165,13 @@ body {
   color: white;
 }
 #dic-input:focus,
-#age-input:focus {
+#age-input:focus,
+#country-input:focus {
   box-shadow: 0 0 10px lightgreen;
 }
 #dic-btn,
-#age-btn {
+#age-btn,
+#country-btn {
   border: none;
   color: white;
   padding: 7px 15px;
@@ -184,9 +192,9 @@ body {
 }
 
 .age {
+  position: absolute;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  position: absolute;
   width: 100%;
   height: 100%;
   opacity: 1;
@@ -257,7 +265,8 @@ body {
   color: black;
 }
 .body-active #dic-input,
-.body-active #age-input {
+.body-active #age-input,
+.body-active #country-input {
   background-color: white;
   color: black;
 }
@@ -267,10 +276,14 @@ body {
 .body-active .dic-error {
   color: black;
 }
+.body-active .country {
+  color: black;
+}
 
 /* For the dic loading animation */
 
-.loader-container {
+.loader-container,
+.country-loader-container {
   position: relative;
   height: 40px;
   display: grid;
@@ -284,8 +297,8 @@ body {
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  border: 5px solid #f3f3f3;
-  border-top: 5px solid rgb(151, 150, 150);
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid rgb(151, 150, 150);
   animation: 2s spin linear infinite;
 }
 
@@ -293,4 +306,48 @@ body {
   100% {
     transform: rotate(360deg);
   }
+}
+/* .country {
+  border: 1px solid steelblue;
+} */
+/* .country form {
+  border: 1px solid purple;
+} */
+.country-result {
+  /* border: 1px solid yellow; */
+  width: 400px;
+  text-align: left;
+  height: 0px;
+  overflow: hidden;
+  transition: 1s height;
+}
+.country-result-ext {
+  height: 150px; /*look into this*/
+}
+
+.country img {
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+}
+.country-loader-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+}
+.country-loader-container h3 {
+  display: inline;
+  text-transform: capitalize;
+}
+.country-headings {
+  font-weight: 600;
+}
+
+.country-error p {
+  display: none;
+}
+
+.country-error-html {
+  display: none;
 }
