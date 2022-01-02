@@ -1,20 +1,21 @@
-const toggleBtn = document.querySelector(".toggle-rect");
+// Helper method
+function getEl(selector) {
+  return document.querySelector(selector);
+}
+
+const toggleBtn = getEl(".toggle-rect");
 const body = document.body;
 const mainA = document.querySelectorAll(".links a");
-const firstA = mainA[0];
-const secondA = mainA[1];
-const thirdA = mainA[2];
-const fourthA = mainA[3];
-const backBtn = document.querySelector(".back");
-const dic = document.querySelector(".dic");
-const age = document.querySelector(".age");
-const country = document.querySelector(".country");
-const ageForm = document.querySelector(".age form");
+const backBtn = getEl(".back");
+const dic = getEl(".dic");
+const age = getEl(".age");
+const country = getEl(".country");
+const ageForm = getEl(".age form");
 const dicform = dic.querySelector("form");
 const countryForm = country.querySelector("form");
-const ageEl = document.querySelector(".age-counter");
-const ageIn = document.querySelector("#age-input");
-const link = document.querySelector(".links");
+const ageEl = getEl(".age-counter");
+const ageIn = getEl("#age-input");
+const link = getEl(".links");
 
 dic.classList.add("hide");
 age.classList.add("hide");
@@ -33,34 +34,28 @@ backBtn.addEventListener("click", () => {
   link.style.transitionDelay = "0s";
   link.style.zIndex = "10";
   // dic section
-  const dic = document.querySelector(".dic-result");
-  const dicInput = document.querySelector("#dic-input");
-  dicInput.value = "";
-  dic.textContent = "";
-  dic.classList.remove("dic-result-ext");
-  const loaderContainer = document.querySelector(".loader-container");
-  loaderContainer.replaceChildren();
+  getEl(".dic-result").textContent = "";
+  getEl("#dic-input").value = "";
+  getEl(".dic-result").classList.remove("dic-result-ext");
+  getEl(".loader-container").replaceChildren();
   // age section
   ageEl.textContent = "?";
   ageIn.value = "";
   // Country section
   const countryData = document.querySelectorAll(".country-data");
-  const country = document.querySelector(".country-result");
-  const countryInput = document.querySelector("#country-input");
-  countryInput.value = "";
+  const country = getEl(".country-result");
+  getEl("#country-input").value = "";
 
   Array.from(countryData).forEach((el) => (el.textContent = ""));
 
   country.classList.remove("country-result-ext");
-  const countryLoader = document.querySelector(".country-loader-container");
-  countryLoader.replaceChildren();
+  getEl(".country-loader-container").replaceChildren();
 });
 toggleBtn.addEventListener("click", toggle);
-// mainA.forEach((el) => el.addEventListener("click", animateBtn));
-firstA.addEventListener("click", animateBtn);
-secondA.addEventListener("click", animateBtn);
-thirdA.addEventListener("click", animateBtn);
-fourthA.addEventListener("click", animateBtn);
+link.addEventListener("click", (e) => {
+  const target = e.target;
+  if (target.className === "main-links") animateBtn(e);
+});
 
 dicform.addEventListener("submit", getMeaning);
 
@@ -110,7 +105,7 @@ function checkGroup(group) {
 }
 
 function createLoading(parent) {
-  const loaderContainer = document.querySelector(parent);
+  const loaderContainer = getEl(parent);
   const loading = document.createElement("div");
   loading.className = "loading";
   loaderContainer.replaceChildren();
@@ -124,9 +119,9 @@ function getMeaning(e) {
   class Invalid extends Error {}
   createLoading(".loader-container");
 
-  const result = document.querySelector(".dic-result");
+  const result = getEl(".dic-result");
   result.textContent = "";
-  const dicInput = document.querySelector("#dic-input");
+  const dicInput = getEl("#dic-input");
   const url = "https://api.dictionaryapi.dev/api/v2/entries/en/";
 
   const createMeaning = (data) => {
@@ -134,7 +129,7 @@ function getMeaning(e) {
     const title = document.createElement("div");
     title.className = "dic-title";
     title.textContent = dicInput.value;
-    const loaderContainer = document.querySelector(".loader-container");
+    const loaderContainer = getEl(".loader-container");
     loaderContainer.replaceChildren();
     loaderContainer.append(title);
 
@@ -150,7 +145,7 @@ function getMeaning(e) {
     const title = document.createElement("div");
     title.className = "dic-error";
     title.textContent = "Error";
-    const loaderContainer = document.querySelector(".loader-container");
+    const loaderContainer = getEl(".loader-container");
     loaderContainer.replaceChildren();
     loaderContainer.append(title);
   };
@@ -162,7 +157,7 @@ function getMeaning(e) {
       const regex = /^[^\d]+$/;
       if (regex.test(word)) {
         const response = await fetch(`${url}${word}`);
-        document.querySelector(".loading").remove();
+        getEl(".loading").remove();
 
         if (response.ok) {
           const data = await response.json();
@@ -175,7 +170,7 @@ function getMeaning(e) {
       if (e instanceof Invalid || e instanceof Unknown) noWord(e);
       else noWord("Something went wrong!");
     }
-  })(e);
+  })(e); // IIFE (Immediately Invoked Function Expression)
 }
 
 // For the Age section
@@ -184,7 +179,6 @@ const sleep = (ms) => {
 };
 const extractAge = async (data) => {
   const age = data.age;
-  console.log(age);
   if (age) {
     count = 0;
     while (count <= Number(age)) {
@@ -210,51 +204,29 @@ async function getAge(e) {
 
 // For the Country section
 
-function getEl(selector) {
-  return document.querySelector(selector);
-}
-
-function createEl(elName, ...elClass) {
-  const newEl = document.createElement("elName");
-  elClass.forEach((cls) => newEl.classList.add(cls));
-  return newEl;
-}
-
 const inputCountryData = (data) => {
   const result = getEl(".country-result");
-  result.classList.add("country-result-ext");
   result.classList.remove("country-error");
-  const fullName = getEl(".country-name");
-  const capital = getEl(".country-capital");
-  const region = getEl(".country-region");
-  const lang = getEl(".country-lang");
-  const lat = getEl(".country-lat");
-  const lng = getEl(".country-long");
-  const population = getEl(".country-pop");
+  result.classList.add("country-result-ext");
 
-  fullName.textContent = data.fullName;
-  capital.textContent = data.capital;
-  region.textContent = data.region;
-  lang.textContent = data.languages;
-  lng.textContent = data.lng;
-  population.textContent = data.population;
-  lat.textContent = data.lat;
+  getEl(".country-name").textContent = data.fullName;
+  getEl(".country-capital").textContent = data.capital;
+  getEl(".country-region").textContent = data.region;
+  getEl(".country-lang").textContent = data.languages.join(", ");
+  getEl(".country-lat").textContent = data.lat;
+  getEl(".country-long").textContent = data.lng;
+  getEl(".country-pop").textContent = data.population;
+
   getEl(".country-error-html").style.display = "none";
 };
 
 const extractCountryData = (data, word) => {
   const { official: fullName } = data[0].name || "Not found";
-  console.log(fullName);
   const capital = data[0].capital[0] || "Not found";
-  console.log(capital);
   const { region } = data[0] || "Not found";
-  console.log(region);
   const languages = Object.values(data[0].languages) || "Not found"; // an Array
-  languages.forEach((el) => console.log(el));
   const [lat, lng] = data[0].latlng || "Not found";
-  console.log(lat, lng);
   const { population } = data[0] || "Not found";
-  console.log(population);
 
   const obj = {
     fullName,
@@ -271,16 +243,14 @@ const extractCountryData = (data, word) => {
   heading.textContent = word;
   const img = document.createElement("img");
   img.src = data[0].flags.png;
-  const loaderContainer = document.querySelector(".country-loader-container");
+  const loaderContainer = getEl(".country-loader-container");
   loaderContainer.replaceChildren();
   loaderContainer.append(heading);
   loaderContainer.append(img);
 };
 
 function noCountry(err) {
-  console.log(err);
-
-  const result = document.querySelector(".country-result");
+  const result = getEl(".country-result");
   result.classList.add("country-result-ext");
   result.classList.add("country-error");
   getEl(".country-error-html").style.display = "block";
@@ -298,7 +268,7 @@ async function getCountry(e) {
   e.preventDefault();
   createLoading(".country-loader-container");
   try {
-    const word = document.querySelector("#country-input").value.trim();
+    const word = getEl("#country-input").value.trim();
     const url = "https://restcountries.com/v3.1/name/";
     const regex = /^[^\d\?\\]+$/;
     if (regex.test(word)) {
@@ -310,22 +280,19 @@ async function getCountry(e) {
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
         extractCountryData(data, word);
       } else {
-        throw new Error("Couldn't get country's data");
+        throw new Error("Couldn't get country's data!");
       }
     } else {
-      console.log("invalid input");
       throw new Error("Invalid input!");
     }
   } catch (error) {
     if (
       error.message === "Invalid input!" ||
-      error.message === "Couldn't get country's data"
+      error.message === "Couldn't get country's data!"
     )
       noCountry(error.message);
-    // else noCountry("Something went wrong!");
-    else noCountry(error);
+    else noCountry("Something went wrong!");
   }
 }
