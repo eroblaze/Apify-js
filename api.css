@@ -29,7 +29,7 @@ body {
   height: 100%;
   text-align: center;
   overflow: hidden;
-  border: 1px solid purple;
+  /* border: 1px solid purple; */
 }
 
 #head-word {
@@ -307,14 +307,8 @@ body {
     transform: rotate(360deg);
   }
 }
-/* .country {
-  border: 1px solid steelblue;
-} */
-/* .country form {
-  border: 1px solid purple;
-} */
+
 .country-result {
-  /* border: 1px solid yellow; */
   width: 400px;
   text-align: left;
   height: 0px;
@@ -350,4 +344,44 @@ body {
 
 .country-error-html {
   display: none;
+}
+
+@media (max-width: 568px) {
+  :root {
+    --a-width: 220px;
+  }
+  .container {
+    width: 90%;
+  }
+  .board {
+    width: 100%;
+  }
+  .back {
+    font-size: 12px;
+    top: -15px;
+    font-weight: 800;
+  }
+  .country-result {
+    width: 80vw;
+    overflow: visible;
+    opacity: 0;
+  }
+  .country-result-ext {
+    height: 150px; /*look into this*/
+    opacity: 1;
+  }
+
+  .age {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  #age-btn {
+    margin-bottom: 20px;
+  }
+  #age-input {
+    width: var(--a-width);
+  }
 }
