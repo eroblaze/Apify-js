@@ -2,6 +2,9 @@
 function getEl(selector) {
   return document.querySelector(selector);
 }
+function empty(el) {
+  el.innerHTML = null;
+}
 
 const toggleBtn = getEl(".toggle-rect");
 const body = document.body;
@@ -16,6 +19,8 @@ const countryForm = country.querySelector("form");
 const ageEl = getEl(".age-counter");
 const ageIn = getEl("#age-input");
 const link = getEl(".links");
+
+setTimeout(() => (getEl("#global-loader").style.display = "none"), 2000);
 
 dic.classList.add("hide");
 age.classList.add("hide");
@@ -37,7 +42,7 @@ backBtn.addEventListener("click", () => {
   getEl(".dic-result").textContent = "";
   getEl("#dic-input").value = "";
   getEl(".dic-result").classList.remove("dic-result-ext");
-  getEl(".loader-container").replaceChildren();
+  empty(getEl(".loader-container"));
   // age section
   ageEl.textContent = "?";
   ageIn.value = "";
@@ -49,7 +54,7 @@ backBtn.addEventListener("click", () => {
   Array.from(countryData).forEach((el) => (el.textContent = ""));
 
   country.classList.remove("country-result-ext");
-  getEl(".country-loader-container").replaceChildren();
+  empty(getEl(".country-loader-container"));
 });
 toggleBtn.addEventListener("click", toggle);
 link.addEventListener("click", (e) => {
@@ -108,7 +113,7 @@ function createLoading(parent) {
   const loaderContainer = getEl(parent);
   const loading = document.createElement("div");
   loading.className = "loading";
-  loaderContainer.replaceChildren();
+  empty(loaderContainer);
   loaderContainer.append(loading);
 }
 
@@ -130,7 +135,7 @@ function getMeaning(e) {
     title.className = "dic-title";
     title.textContent = dicInput.value;
     const loaderContainer = getEl(".loader-container");
-    loaderContainer.replaceChildren();
+    empty(loaderContainer);
     loaderContainer.append(title);
 
     // For the sliding up effect
@@ -146,7 +151,7 @@ function getMeaning(e) {
     title.className = "dic-error";
     title.textContent = "Error";
     const loaderContainer = getEl(".loader-container");
-    loaderContainer.replaceChildren();
+    empty(loaderContainer);
     loaderContainer.append(title);
   };
 
@@ -195,11 +200,13 @@ async function getAge(e) {
   const name = ageIn.value.trim();
   const url = "https://api.agify.io/?name=";
 
-  if (name) {
-    const response = await fetch(`${url}${name}`);
-    const data = await response.json();
-    extractAge(data);
-  }
+  try {
+    if (name) {
+      const response = await fetch(`${url}${name}`);
+      const data = await response.json();
+      extractAge(data);
+    }
+  } catch (error) {}
 }
 
 // For the Country section
@@ -244,7 +251,7 @@ const extractCountryData = (data, word) => {
   const img = document.createElement("img");
   img.src = data[0].flags.png;
   const loaderContainer = getEl(".country-loader-container");
-  loaderContainer.replaceChildren();
+  empty(loaderContainer);
   loaderContainer.append(heading);
   loaderContainer.append(img);
 };
@@ -260,7 +267,7 @@ function noCountry(err) {
   title.className = "dic-error";
   title.textContent = "Error";
   const loaderContainer = getEl(".country-loader-container");
-  loaderContainer.replaceChildren();
+  empty(loaderContainer);
   loaderContainer.append(title);
 }
 

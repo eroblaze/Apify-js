@@ -142,6 +142,7 @@ body {
 .dic-result {
   color: white;
   font-weight: 400;
+  word-break: normal;
   text-align: left;
   margin-top: 0px;
   height: 0px;
@@ -149,7 +150,7 @@ body {
   transition: 1s all;
 }
 .dic-result-ext {
-  height: 150px;
+  height: 120px;
 }
 
 #dic-input,
@@ -346,6 +347,52 @@ body {
   display: none;
 }
 
+#global-loader {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  z-index: 20000000;
+  display: grid;
+  place-items: center;
+}
+.load-cont {
+  width: 100px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.load-cont span {
+  width: 15px;
+  height: 15px;
+  background-color: var(--a-prim);
+  margin: 7px;
+  border-radius: 50%;
+  display: block;
+  animation: 1.4s global infinite;
+  animation-fill-mode: both;
+}
+
+.load-cont span:nth-child(2) {
+  animation-delay: 0.5s;
+}
+
+.load-cont span:nth-child(3) {
+  animation-delay: 1s;
+}
+
+@keyframes global {
+  0%,
+  100% {
+    opacity: 0.2;
+  }
+  20% {
+    opacity: 1;
+  }
+}
+
 @media (max-width: 568px) {
   :root {
     --a-width: 220px;
@@ -367,7 +414,7 @@ body {
     opacity: 0;
   }
   .country-result-ext {
-    height: 150px; /*look into this*/
+    height: 120px; /*look into this*/
     opacity: 1;
   }
 
