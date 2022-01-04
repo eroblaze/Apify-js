@@ -1,2 +1,2 @@
-# COLLECTION-OF-APIS
+# Apify-js
 A javascript app for apis
