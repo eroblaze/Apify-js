@@ -1,9 +1,18 @@
-// Helper method
+// Helper functions
 function getEl(selector) {
   return document.querySelector(selector);
 }
 function empty(el) {
   el.innerHTML = null;
+}
+function disable(el) {
+  el.disabled = true;
+}
+function remDisable(el) {
+  el.disabled = false;
+}
+function prevent(e) {
+  e.preventDefault();
 }
 
 const toggleBtn = getEl(".toggle-rect");
@@ -19,18 +28,68 @@ const countryForm = country.querySelector("form");
 const ageEl = getEl(".age-counter");
 const ageIn = getEl("#age-input");
 const link = getEl(".links");
+const dicIn = getEl("#dic-input");
+const conIn = getEl("#country-input");
 
-setTimeout(() => (getEl("#global-loader").style.display = "none"), 2000);
+function adjust(e, res, load, ext = "dic-result-ext") {
+  body.classList.add("remove");
+  getEl(res).classList.remove(ext);
+  empty(getEl(load));
+}
+
+dicIn.addEventListener("focus", (e) =>
+  adjust(e, ".dic-result", ".loader-container")
+);
+dicIn.addEventListener("blur", () => {
+  body.classList.remove("remove");
+});
+
+ageIn.addEventListener("focus", function () {
+  body.classList.add("remove");
+  getEl(".grid-age").classList.add("img-exp");
+});
+ageIn.addEventListener("blur", () => {
+  body.classList.remove("remove");
+  getEl(".grid-age").classList.remove("img-exp");
+});
+
+conIn.addEventListener("focus", (e) =>
+  adjust(
+    e,
+    ".country-result",
+    ".country-loader-container",
+    "country-result-ext"
+  )
+);
+conIn.addEventListener("blur", () => {
+  body.classList.remove("remove");
+});
+
+// loading animation
+
+setTimeout(() => {
+  getEl("#global-loader").style.display = "none";
+}, 2000);
 
 dic.classList.add("hide");
 age.classList.add("hide");
 country.classList.add("hide");
 
+disable(ageIn);
+disable(conIn);
+disable(dicIn);
+
 function removeGroup() {
   dic.classList.add("hide");
   age.classList.add("hide");
   country.classList.add("hide");
+
+  disable(ageIn);
+  disable(conIn);
+  disable(dicIn);
 }
+
+// For the back btn
 
 backBtn.addEventListener("click", () => {
   mainA.forEach((el) => el.classList.remove("move"));
@@ -55,23 +114,37 @@ backBtn.addEventListener("click", () => {
 
   country.classList.remove("country-result-ext");
   empty(getEl(".country-loader-container"));
+
+  // To remove the disabled attribute from all buttons
+
+  remDisable(getEl("#dic-btn"));
+  remDisable(getEl("#age-btn"));
+  remDisable(getEl("#age-btn"));
 });
+
 toggleBtn.addEventListener("click", toggle);
 link.addEventListener("click", (e) => {
   const target = e.target;
   if (target.className === "main-links") animateBtn(e);
 });
 
-dicform.addEventListener("submit", getMeaning);
+getEl("#dic-btn").addEventListener("click", getMeaning);
 
-ageForm.addEventListener("submit", getAge);
+getEl("#age-btn").addEventListener("click", getAge);
 
-countryForm.addEventListener("submit", getCountry);
+getEl("#country-btn").addEventListener("click", getCountry);
+
+dicform.addEventListener("submit", prevent);
+
+ageForm.addEventListener("submit", prevent);
+
+countryForm.addEventListener("submit", prevent);
 
 function toggle() {
   toggleBtn.classList.toggle("toggle-active");
   body.classList.toggle("body-active");
 }
+
 function animateBtn(e) {
   const target = e.target;
   link.style.transitionDelay = ".4s";
@@ -99,12 +172,15 @@ function checkGroup(group) {
   switch (groupData) {
     case "dic":
       dic.classList.remove("hide");
+      remDisable(dicIn);
       break;
     case "age":
       age.classList.remove("hide");
+      remDisable(ageIn);
       break;
     case "country":
       country.classList.remove("hide");
+      remDisable(conIn);
       break;
   }
 }
@@ -123,6 +199,7 @@ function getMeaning(e) {
   class Unknown extends Error {}
   class Invalid extends Error {}
   createLoading(".loader-container");
+  disable(e.target);
 
   const result = getEl(".dic-result");
   result.textContent = "";
@@ -159,7 +236,7 @@ function getMeaning(e) {
     e.preventDefault();
     try {
       const word = dicInput.value.trim();
-      const regex = /^[^\d]+$/;
+      const regex = /^[^\d.\\/]+$/;
       if (regex.test(word)) {
         const response = await fetch(`${url}${word}`);
         getEl(".loading").remove();
@@ -174,11 +251,14 @@ function getMeaning(e) {
     } catch (e) {
       if (e instanceof Invalid || e instanceof Unknown) noWord(e);
       else noWord("Something went wrong!");
+    } finally {
+      remDisable(e.target);
     }
   })(e); // IIFE (Immediately Invoked Function Expression)
 }
 
 // For the Age section
+
 const sleep = (ms) => {
   return new Promise((resolve) => setTimeout(resolve, ms));
 };
@@ -195,8 +275,10 @@ const extractAge = async (data) => {
     ageEl.textContent = "?";
   }
 };
+
 async function getAge(e) {
   e.preventDefault();
+  disable(e.target);
   const name = ageIn.value.trim();
   const url = "https://api.agify.io/?name=";
 
@@ -206,7 +288,10 @@ async function getAge(e) {
       const data = await response.json();
       extractAge(data);
     }
-  } catch (error) {}
+  } catch (error) {
+  } finally {
+    remDisable(e.target);
+  }
 }
 
 // For the Country section
@@ -273,11 +358,12 @@ function noCountry(err) {
 
 async function getCountry(e) {
   e.preventDefault();
+  disable(e.target);
   createLoading(".country-loader-container");
   try {
     const word = getEl("#country-input").value.trim();
     const url = "https://restcountries.com/v3.1/name/";
-    const regex = /^[^\d\?\\]+$/;
+    const regex = /^[^\d\?\\/.]+$/;
     if (regex.test(word)) {
       let response = "";
       // To avoid name collision
@@ -301,5 +387,7 @@ async function getCountry(e) {
     )
       noCountry(error.message);
     else noCountry("Something went wrong!");
+  } finally {
+    remDisable(e.target);
   }
 }

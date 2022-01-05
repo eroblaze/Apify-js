@@ -38,6 +38,7 @@ body {
   top: 10%;
   transform: translate(-50%, -50%);
   font-size: 3em;
+  z-index: 20;
 }
 .links {
   position: relative;
@@ -213,6 +214,8 @@ body {
   height: var(--a-height);
 }
 #age-btn {
+  position: relative;
+  z-index: 100000;
   margin-top: 0;
 }
 .age img {
@@ -313,7 +316,7 @@ body {
   width: 400px;
   text-align: left;
   height: 0px;
-  overflow: hidden;
+  overflow: auto;
   transition: 1s height;
 }
 .country-result-ext {
@@ -390,8 +393,11 @@ body {
   }
   20% {
     opacity: 1;
+    transform: scale(1.2);
   }
 }
+
+/* Responsive */
 
 @media (max-width: 568px) {
   :root {
@@ -410,7 +416,7 @@ body {
   }
   .country-result {
     width: 80vw;
-    overflow: visible;
+
     opacity: 0;
   }
   .country-result-ext {
@@ -430,5 +436,16 @@ body {
   }
   #age-input {
     width: var(--a-width);
+  }
+  .remove #head-word,
+  .remove .toggle-rect {
+    z-index: -5;
+  }
+  .remove .back {
+    transform: translateX(1000px);
+  }
+  .img-exp {
+    height: 0;
+    display: none;
   }
 }
